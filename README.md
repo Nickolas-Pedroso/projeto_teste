@@ -56,8 +56,13 @@ GitHub as instruções **push an existing repository** para adicionar o remoto.
 4. Abra o domínio Vercel, entre em uma sala e clique em **Copiar convite**.
    Envie esse link ao seu amigo; ele informa o nome e entra na sala preenchida.
 5. Para compartilhar, clique em **Compartilhar tela** e escolha o jogo ou a tela.
-   O navegador pede autorização. Use um navegador compatível e mantenha o app
-   aberto durante a transmissão.
+   Para conversar por voz ou vídeo, clique em **Ativar microfone** e/ou
+   **Ativar câmera**. Autorize o acesso solicitado pelo navegador. Microfone e
+   câmera só são compartilhados enquanto os respectivos controles estiverem
+   ligados; clique novamente para desligá-los.
+   Use o ícone de balão para abrir ou fechar o chat. O microfone usa cancelamento de
+   eco; o áudio do sistema durante uma transmissão ao vivo fica desligado por
+   padrão para não retransmitir a voz e o áudio reproduzidos no computador.
 
 Depois de mudar `GAMECHAT_SERVER_URL` na Vercel, faça um novo deploy, pois o valor
 é incorporado ao frontend durante o build. Se adicionar um domínio personalizado
@@ -66,3 +71,5 @@ precisa permitir uma única instância, porque as salas e os participantes ficam
 na memória do processo. O plano gratuito pode suspender o serviço após inatividade,
 causando demora ao primeiro acesso. Redes restritivas podem precisar de um serviço
 TURN para estabelecer a conexão de compartilhamento WebRTC.
+Microfone e câmera exigem um contexto seguro (HTTPS em produção ou `localhost`
+em desenvolvimento) e autorização do usuário no navegador.

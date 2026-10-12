@@ -33,29 +33,63 @@
       <header class="topbar">
         <div><strong id="header-room"># sala</strong><span class="subhead"> · chat e transmissão</span></div>
         <div class="topbar-actions">
-          <button id="invite-btn" class="invite-btn">Copiar convite</button>
-          <button id="share-btn" class="share-btn">▣ Compartilhar tela</button>
+          <button id="invite-btn" class="invite-btn" type="button" title="Copiar convite">
+            <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>
+            <span>Copiar convite</span>
+          </button>
         </div>
       </header>
+      <div id="live-banner" class="live-banner hidden" role="status"><span class="live-dot"></span> VOCÊ ESTÁ AO VIVO <span id="live-detail">Compartilhando sua tela</span></div>
       <div class="content">
         <section class="watch-area">
           <div class="section-title">TELA COMPARTILHADA <span id="share-status">Ninguém transmitindo</span></div>
           <div id="video-placeholder" class="video-placeholder">
-            <div class="screen-icon">▣</div>
+            <div class="screen-icon" aria-hidden="true"><svg class="ui-icon screen-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></div>
             <h2>Nenhuma transmissão ativa</h2>
             <p>Quando alguém compartilhar a tela, o jogo aparecerá aqui.</p>
           </div>
           <video id="screen-video" autoplay playsinline controls class="hidden"></video>
           <div id="video-caption" class="video-caption hidden"></div>
+          <div id="camera-grid" class="camera-grid hidden" aria-label="Câmeras dos participantes"></div>
+          <div class="media-controls" role="toolbar" aria-label="Controles da transmissão">
+            <button id="microphone-btn" class="media-btn icon-control" type="button" aria-label="Ativar microfone" aria-pressed="false" title="Ativar microfone">
+              <svg class="ui-icon state-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8"></path><path class="muted-indicator" d="m4 4 16 16"></path></svg>
+            </button>
+            <button id="camera-btn" class="media-btn icon-control" type="button" aria-label="Ativar câmera" aria-pressed="false" title="Ativar câmera">
+              <svg class="ui-icon state-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="m16 10 5-3v10l-5-3"></path><path class="muted-indicator" d="m4 4 16 16"></path></svg>
+            </button>
+            <button id="share-btn" class="share-btn icon-control live-action" type="button" aria-label="Iniciar transmissão ao vivo" aria-pressed="false" title="Iniciar transmissão ao vivo">
+              <svg class="ui-icon share-screen-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3.5" width="18" height="13" rx="2"></rect>
+                <path d="M8 21h8M12 16.5V10m-3 3 3-3 3 3"></path>
+              </svg>
+            </button>
+            <label class="system-audio-option" title="Compartilhar áudio do sistema (desligado por padrão para reduzir eco)">
+              <input id="system-audio" type="checkbox" aria-label="Compartilhar áudio do sistema">
+              <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7m3-10a9 9 0 0 1 0 13"></path></svg>
+            </label>
+            <button id="chat-toggle" class="icon-btn" type="button" aria-label="Abrir chat" aria-expanded="false" title="Abrir chat">
+              <svg class="ui-icon chat-bubble-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-3.5-.8L4 20l1.3-3.5A7.2 7.2 0 0 1 4 12c0-4.2 3.6-7.5 8-7.5s8 3.1 8 7z"></path><path d="M8 12h.01M12 12h.01M16 12h.01"></path></svg>
+              <svg class="ui-icon chat-close-icon hidden" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+            </button>
+            <span id="media-status" class="sr-only" aria-live="polite">Microfone e câmera desligados</span>
+          </div>
         </section>
-        <section class="chat-area">
-          <div class="section-title">MENSAGENS</div>
+        <section id="chat-area" class="chat-area">
+          <div class="chat-heading">
+            <div class="section-title">MENSAGENS</div>
+            <button id="chat-close" class="icon-btn chat-close" type="button" aria-label="Fechar chat" title="Fechar chat">
+              <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+            </button>
+          </div>
           <div id="messages" class="messages">
             <div class="welcome"><strong>Bem-vindo ao GameChat!</strong><p>As mensagens desta sala aparecem aqui.</p></div>
           </div>
           <form id="chat-form" class="chat-form">
             <input id="message-input" maxlength="1500" placeholder="Enviar mensagem para a sala..." autocomplete="off">
-            <button type="submit" aria-label="Enviar">➤</button>
+            <button type="submit" aria-label="Enviar" title="Enviar mensagem">
+              <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"></path><path d="M22 2 11 13"></path></svg>
+            </button>
           </form>
         </section>
       </div>

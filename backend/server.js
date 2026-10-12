@@ -19,6 +19,8 @@ const activeScreens = new Map();
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
 io.on("connection", (socket) => {
+  socket.data.mediaState = { microphone: false, camera: false };
+
   socket.on("join-room", ({ room, username } = {}) => {
     room = String(room || "").trim().slice(0, 40);
     username = String(username || "Visitante").trim().slice(0, 24);
@@ -40,7 +42,8 @@ io.on("connection", (socket) => {
       .filter((id) => id !== socket.id)
       .map((id) => ({
         id,
-        username: io.sockets.sockets.get(id)?.data.username || "Visitante"
+        username: io.sockets.sockets.get(id)?.data.username || "Visitante",
+        mediaState: io.sockets.sockets.get(id)?.data.mediaState || { microphone: false, camera: false }
       }));
 
     socket.emit("room-joined", {
@@ -50,9 +53,21 @@ io.on("connection", (socket) => {
     });
     socket.to(room).emit("user-joined", {
       id: socket.id,
-      username: socket.data.username
+      username: socket.data.username,
+      mediaState: socket.data.mediaState
     });
     socket.to(room).emit("system-message", `${socket.data.username} entrou na sala.`);
+  });
+
+  socket.on("media-state", ({ microphone, camera } = {}) => {
+    const room = socket.data.room;
+    if (!room || typeof microphone !== "boolean" || typeof camera !== "boolean") return;
+    socket.data.mediaState = { microphone, camera };
+    io.to(room).emit("media-state", {
+      id: socket.id,
+      microphone,
+      camera
+    });
   });
 
   socket.on("chat-message", (text) => {
