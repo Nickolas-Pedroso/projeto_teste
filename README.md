@@ -1,4 +1,4 @@
-# GameChat
+# LiveStream
 
 Aplicativo dividido em duas partes para publicar o frontend na Vercel e o backend
 no Render:

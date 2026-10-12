@@ -9,6 +9,7 @@ const placeholder = $("video-placeholder");
 const shareStatus = $("share-status");
 const shareBtn = $("share-btn");
 const inviteBtn = $("invite-btn");
+const homeBtn = $("home-btn");
 const microphoneBtn = $("microphone-btn");
 const cameraBtn = $("camera-btn");
 const cameraGrid = $("camera-grid");
@@ -273,6 +274,25 @@ function closeConnections() {
   connections.forEach((pc) => pc.close());
   connections.clear();
 }
+function showJoinScreen() {
+  clearRemoteScreen();
+  cameraGrid.replaceChildren();
+  updateCameraGrid();
+  currentRoom = "";
+  peers.clear();
+  peerStreamTypes.clear();
+  remoteStreams.clear();
+  screenOwnerId = null;
+  screenOwnerName = "";
+  $("room").value = "";
+  $("room-name").textContent = "# sala";
+  $("header-room").textContent = "# sala";
+  usersEl.replaceChildren();
+  messagesEl.replaceChildren();
+  joinScreen.classList.remove("hidden");
+  app.classList.add("hidden");
+  history.replaceState(null, "", window.location.pathname);
+}
 function connectLocalMediaToPeers() {
   peers.forEach((_person, peerId) => {
     const pc = makeConnection(peerId);
@@ -428,6 +448,30 @@ inviteBtn.addEventListener("click", async () => {
     toast("Não foi possível copiar o link. Verifique as permissões do navegador.");
   }
 });
+homeBtn.addEventListener("click", () => {
+  homeBtn.disabled = true;
+  if (localScreen) stopScreenShare();
+  localMedia.getTracks().forEach((track) => track.stop());
+  localMedia = new MediaStream();
+  updateMediaControls();
+  removeMediaTile(myId);
+  closeConnections();
+
+  if (!socket.connected) {
+    showJoinScreen();
+    homeBtn.disabled = false;
+    return;
+  }
+  socket.timeout(5000).emit("leave-room", (error, response) => {
+    homeBtn.disabled = false;
+    if (error || !response?.ok) {
+      console.error(error || new Error("O servidor não confirmou a saída da sala."));
+      toast("Não foi possível sair da sala. Tente novamente.");
+      return;
+    }
+    showJoinScreen();
+  });
+});
 
 const inviteRoom = new URLSearchParams(window.location.search).get("room");
 if (inviteRoom) $("room").value = inviteRoom.slice(0, 40);
@@ -451,12 +495,14 @@ $("chat-form").addEventListener("submit", (event) => {
 socket.on("connect", () => { myId = socket.id; });
 socket.on("room-joined", ({ room, peers: list, screenOwner }) => {
   currentRoom = room;
+  peers.clear();
   list.forEach((person) => peers.set(person.id, person));
   $("room-name").textContent = `# ${room}`;
   $("header-room").textContent = `# ${room}`;
   joinScreen.classList.add("hidden");
   app.classList.remove("hidden");
   renderUsers();
+  messagesEl.replaceChildren();
   addSystem(`Você entrou na sala ${room}.`);
   if (screenOwner) {
     screenOwnerId = screenOwner.id;

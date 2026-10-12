@@ -18,6 +18,22 @@ const activeScreens = new Map();
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
+function leaveRoom(socket) {
+  const room = socket.data.room;
+  if (!room) return false;
+
+  if (activeScreens.get(room)?.id === socket.id) {
+    activeScreens.delete(room);
+    socket.to(room).emit("screen-stopped", { id: socket.id });
+  }
+  socket.to(room).emit("user-left", { id: socket.id });
+  socket.to(room).emit("system-message", `${socket.data.username || "Alguém"} saiu da sala.`);
+  socket.leave(room);
+  delete socket.data.room;
+  socket.data.mediaState = { microphone: false, camera: false };
+  return true;
+}
+
 io.on("connection", (socket) => {
   socket.data.mediaState = { microphone: false, camera: false };
 
@@ -25,14 +41,7 @@ io.on("connection", (socket) => {
     room = String(room || "").trim().slice(0, 40);
     username = String(username || "Visitante").trim().slice(0, 24);
     if (!room) return socket.emit("app-error", "Digite o nome da sala.");
-    if (socket.data.room) {
-      socket.leave(socket.data.room);
-      socket.to(socket.data.room).emit("user-left", { id: socket.id });
-      if (activeScreens.get(socket.data.room)?.id === socket.id) {
-        activeScreens.delete(socket.data.room);
-        socket.to(socket.data.room).emit("screen-stopped", { id: socket.id });
-      }
-    }
+    leaveRoom(socket);
 
     socket.data.room = room;
     socket.data.username = username || "Visitante";
@@ -57,6 +66,11 @@ io.on("connection", (socket) => {
       mediaState: socket.data.mediaState
     });
     socket.to(room).emit("system-message", `${socket.data.username} entrou na sala.`);
+  });
+
+  socket.on("leave-room", (ack) => {
+    const left = leaveRoom(socket);
+    if (typeof ack === "function") ack({ ok: true, left });
   });
 
   socket.on("media-state", ({ microphone, camera } = {}) => {
@@ -116,15 +130,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    const room = socket.data.room;
-    if (room) {
-      if (activeScreens.get(room)?.id === socket.id) {
-        activeScreens.delete(room);
-        socket.to(room).emit("screen-stopped", { id: socket.id });
-      }
-      socket.to(room).emit("user-left", { id: socket.id });
-      socket.to(room).emit("system-message", `${socket.data.username || "Alguém"} saiu da sala.`);
-    }
+    leaveRoom(socket);
   });
 });
 

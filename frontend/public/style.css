@@ -9,3 +9,6 @@
 @media(max-width:720px){.content.chat-open{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(180px,1fr) minmax(200px,1fr)}.content.chat-open .watch-area{grid-column:1;grid-row:1}.content.chat-open .chat-area{grid-column:1;grid-row:2;border-left:0;border-top:1px solid #1a1b1e}.system-audio-option{font-size:10px}.audio-echo-note{font-size:10px}}
 @media(max-width:470px){.topbar-actions{gap:4px}.topbar-actions .icon-btn{width:32px;height:32px}.control-label{display:none}.media-controls .media-btn{width:38px;height:36px}.system-audio-option{white-space:normal;max-width:145px}}
 .media-controls .share-btn{display:inline-grid;place-items:center}
+.join-brand-icon{display:block;width:64px;height:64px;margin:0 auto 12px}.join-card h1{text-align:center}.brand{display:flex;align-items:center;gap:8px}.brand img{width:27px;height:27px;flex:none}.brand span{color:#f2f3f5}
+.home-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#454851;white-space:nowrap}.home-btn:disabled{cursor:wait;opacity:.65}
+@media(max-width:470px){.home-btn span{display:none}.topbar-actions .home-btn{width:34px;height:34px;padding:7px}}

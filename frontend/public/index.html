@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GameChat</title>
+  <title>LiveStream</title>
+  <link rel="icon" type="image/svg+xml" href="/brand-icon.svg">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <section id="join-screen" class="join-wrap">
     <form id="join-form" class="join-card">
-      <div class="logo">G<span>C</span></div>
-      <h1>GameChat</h1>
-      <p>Converse e assista à tela dos seus amigos jogando.</p>
+      <img class="join-brand-icon" src="/brand-icon.svg" alt="">
+      <h1>LiveStream</h1>
+      <p>Seu jogo. Sua galera. Juntos, de qualquer lugar.</p>
       <label>Seu nome<input id="username" maxlength="24" placeholder="Ex.: Nickolas" required></label>
       <label>Nome da sala<input id="room" maxlength="40" placeholder="Ex.: squad-da-noite" required></label>
       <button type="submit">Entrar na sala</button>
@@ -21,7 +22,7 @@
 
   <main id="app" class="app hidden">
     <aside class="sidebar">
-      <div class="brand">Game<span>Chat</span></div>
+      <div class="brand"><img src="/brand-icon.svg" alt=""> <span>LiveStream</span></div>
       <div class="server-label">SALA ATUAL</div>
       <div id="room-name" class="room-name"># sala</div>
       <div class="server-label people-label">PESSOAS CONECTADAS</div>
@@ -33,6 +34,10 @@
       <header class="topbar">
         <div><strong id="header-room"># sala</strong><span class="subhead"> · chat e transmissão</span></div>
         <div class="topbar-actions">
+          <button id="home-btn" class="home-btn" type="button" title="Voltar à tela inicial" aria-label="Voltar à tela inicial">
+            <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path><path d="M9 12h12"></path><path d="M4 5v14"></path></svg>
+            <span>Voltar</span>
+          </button>
           <button id="invite-btn" class="invite-btn" type="button" title="Copiar convite">
             <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>
             <span>Copiar convite</span>
@@ -83,7 +88,7 @@
             </button>
           </div>
           <div id="messages" class="messages">
-            <div class="welcome"><strong>Bem-vindo ao GameChat!</strong><p>As mensagens desta sala aparecem aqui.</p></div>
+            <div class="welcome"><strong>Bem-vindo ao LiveStream!</strong><p>As mensagens desta sala aparecem aqui.</p></div>
           </div>
           <form id="chat-form" class="chat-form">
             <input id="message-input" maxlength="1500" placeholder="Enviar mensagem para a sala..." autocomplete="off">
