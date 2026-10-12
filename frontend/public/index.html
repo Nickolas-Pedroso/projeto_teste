@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameChat</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <section id="join-screen" class="join-wrap">
+    <form id="join-form" class="join-card">
+      <div class="logo">G<span>C</span></div>
+      <h1>GameChat</h1>
+      <p>Converse e assista à tela dos seus amigos jogando.</p>
+      <label>Seu nome<input id="username" maxlength="24" placeholder="Ex.: Nickolas" required></label>
+      <label>Nome da sala<input id="room" maxlength="40" placeholder="Ex.: squad-da-noite" required></label>
+      <button type="submit">Entrar na sala</button>
+      <small>Use o mesmo nome de sala para encontrar seus amigos.</small>
+    </form>
+  </section>
+
+  <main id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand">Game<span>Chat</span></div>
+      <div class="server-label">SALA ATUAL</div>
+      <div id="room-name" class="room-name"># sala</div>
+      <div class="server-label people-label">PESSOAS CONECTADAS</div>
+      <ul id="users" class="users"></ul>
+      <div class="sidebar-bottom"><span class="status-dot"></span> Conectado</div>
+    </aside>
+
+    <section class="main-panel">
+      <header class="topbar">
+        <div><strong id="header-room"># sala</strong><span class="subhead"> · chat e transmissão</span></div>
+        <div class="topbar-actions">
+          <button id="invite-btn" class="invite-btn">Copiar convite</button>
+          <button id="share-btn" class="share-btn">▣ Compartilhar tela</button>
+        </div>
+      </header>
+      <div class="content">
+        <section class="watch-area">
+          <div class="section-title">TELA COMPARTILHADA <span id="share-status">Ninguém transmitindo</span></div>
+          <div id="video-placeholder" class="video-placeholder">
+            <div class="screen-icon">▣</div>
+            <h2>Nenhuma transmissão ativa</h2>
+            <p>Quando alguém compartilhar a tela, o jogo aparecerá aqui.</p>
+          </div>
+          <video id="screen-video" autoplay playsinline controls class="hidden"></video>
+          <div id="video-caption" class="video-caption hidden"></div>
+        </section>
+        <section class="chat-area">
+          <div class="section-title">MENSAGENS</div>
+          <div id="messages" class="messages">
+            <div class="welcome"><strong>Bem-vindo ao GameChat!</strong><p>As mensagens desta sala aparecem aqui.</p></div>
+          </div>
+          <form id="chat-form" class="chat-form">
+            <input id="message-input" maxlength="1500" placeholder="Enviar mensagem para a sala..." autocomplete="off">
+            <button type="submit" aria-label="Enviar">➤</button>
+          </form>
+        </section>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast hidden"></div>
+  <script src="__GAMECHAT_SERVER_URL__/socket.io/socket.io.js"></script>
+  <script>window.GAMECHAT_SERVER_URL = "__GAMECHAT_SERVER_URL__";</script>
+  <script src="/app.js"></script>
+</body>
+</html>
