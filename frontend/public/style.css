@@ -8,3 +8,4 @@
 .audio-echo-note{font-size:11px;color:var(--muted)}
 @media(max-width:720px){.content.chat-open{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(180px,1fr) minmax(200px,1fr)}.content.chat-open .watch-area{grid-column:1;grid-row:1}.content.chat-open .chat-area{grid-column:1;grid-row:2;border-left:0;border-top:1px solid #1a1b1e}.system-audio-option{font-size:10px}.audio-echo-note{font-size:10px}}
 @media(max-width:470px){.topbar-actions{gap:4px}.topbar-actions .icon-btn{width:32px;height:32px}.control-label{display:none}.media-controls .media-btn{width:38px;height:36px}.system-audio-option{white-space:normal;max-width:145px}}
+.media-controls .share-btn{display:inline-grid;place-items:center}
